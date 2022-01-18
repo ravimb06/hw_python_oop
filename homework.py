@@ -73,7 +73,7 @@ class SportsWalking(Training):
     coeff_2: float = 0.029
 
     def __init__(self,
-                 action: int, 
+                 action: int,
                  duration: float,
                  weight: float,
                  height: float,
@@ -82,14 +82,15 @@ class SportsWalking(Training):
         self.height = height
 
     def get_spent_calories(self) -> float:
-        return ((self.coeff_1 * self.weight +
-                (self.get_mean_speed() ** 2 // self.height)
+        return ((self.coeff_1 * self.weight
+                + (self.get_mean_speed() ** 2 // self.height)
                 * self.coeff_2 * self.weight) * (self.duration * 60))
-                
-    
+
+
 class Swimming(Training):
     """Тренировка: плавание."""
     LEN_STEP: float = 1.38
+
     def __init__(self,
                  action: int,
                  duration: float,
@@ -107,7 +108,7 @@ class Swimming(Training):
 
     def get_spent_calories(self) -> float:
         return (self.get_mean_speed() + 1.1) * 2 * self.weight
-    
+
 
 def read_package(workout_type: str, data: list) -> Training:
     """Прочитать данные полученные от датчиков."""
@@ -115,7 +116,7 @@ def read_package(workout_type: str, data: list) -> Training:
     if workout_type not in workout.keys():
         raise KeyError('Неизвестный вид тренировки')
     return workout[workout_type](*data)
-     
+
 
 def main(training: Training) -> None:
     """Главная функция."""
@@ -133,4 +134,3 @@ if __name__ == '__main__':
     for workout_type, data in packages:
         training = read_package(workout_type, data)
         main(training)
-
