@@ -58,19 +58,19 @@ class Training:
 
 class Running(Training):
     """Тренировка: бег."""
-    coeff_kcal_1: float = 18
-    coeff_kcal_2: float = 20
+    COEFF_KCAL_1: float = 18
+    COEFF_KCAL_2: float = 20
 
     def get_spent_calories(self) -> float:
-        return ((self.coeff_kcal_1 * self.get_mean_speed()
-                - self.coeff_kcal_2)
+        return ((self.COEFF_KCAL_1 * self.get_mean_speed()
+                - self.COEFF_KCAL_2)
                 * self.weight / self.M_IN_KM * (self.duration * 60))
 
 
 class SportsWalking(Training):
     """Тренировка: спортивная ходьба."""
-    coeff_1: float = 0.035
-    coeff_2: float = 0.029
+    COEFF_1: float = 0.035
+    COEFF_2: float = 0.029
 
     def __init__(self,
                  action: int,
@@ -82,9 +82,9 @@ class SportsWalking(Training):
         self.height = height
 
     def get_spent_calories(self) -> float:
-        return ((self.coeff_1 * self.weight
+        return ((self.COEFF_1 * self.weight
                 + (self.get_mean_speed() ** 2 // self.height)
-                * self.coeff_2 * self.weight) * (self.duration * 60))
+                * self.COEFF_2 * self.weight) * (self.duration * 60))
 
 
 class Swimming(Training):
@@ -112,10 +112,10 @@ class Swimming(Training):
 
 def read_package(workout_type: str, data: list) -> Training:
     """Прочитать данные полученные от датчиков."""
-    workout = {'SWM': Swimming, 'RUN': Running, 'WLK': SportsWalking}
-    if workout_type not in workout.keys():
-        raise KeyError('Неизвестный вид тренировки')
-    return workout[workout_type](*data)
+    mapping_1: dict[str,Training] = {'SWM': Swimming, 'RUN': Running, 'WLK': SportsWalking}
+    if workout_type not in mapping_1.keys():
+        raise print('Неизвестный вид тренировки')
+    return mapping_1[workout_type](*data)
 
 
 def main(training: Training) -> None:
