@@ -64,7 +64,7 @@ class Running(Training):
     def get_spent_calories(self) -> float:
         return ((self.coeff_kcal_1 * self.get_mean_speed()
                 - self.coeff_kcal_2)
-                * (self.weight / self.M_IN_KM) * (self.duration * 60))
+                * self.weight / self.M_IN_KM * (self.duration * 60))
 
 
 class SportsWalking(Training):
@@ -127,7 +127,7 @@ def main(training: Training) -> None:
 if __name__ == '__main__':
     packages = [
         ('SWM', [720, 1, 80, 25, 40]),
-        ('RUN', [15000, 1, 75]),
+        ('RUN', [1206, 12, 6]),
         ('WLK', [9000, 1, 75, 180]),
     ]
 
