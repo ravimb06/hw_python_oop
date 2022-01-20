@@ -113,7 +113,7 @@ class Swimming(Training):
 def read_package(workout_type: str, data: list) -> Training:
     """Прочитать данные полученные от датчиков."""
     mapping_1: dict[str, Training] = {'SWM': Swimming, 'RUN': Running,
-                                     'WLK': SportsWalking}
+                                      'WLK': SportsWalking}
     if workout_type not in mapping_1.keys():
         raise print('Неизвестный вид тренировки')
     return mapping_1[workout_type](*data)
