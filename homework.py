@@ -25,6 +25,7 @@ class Training:
     """Базовый класс тренировки."""
     M_IN_KM: int = 1000
     LEN_STEP: float = 0.65
+    M_IN_HOUR: int = 60
 
     def __init__(self,
                  action: float,
@@ -64,7 +65,8 @@ class Running(Training):
     def get_spent_calories(self) -> float:
         return ((self.COEFF_KCAL_1 * self.get_mean_speed()
                 - self.COEFF_KCAL_2)
-                * self.weight / self.M_IN_KM * (self.duration * 60))
+                * self.weight / self.M_IN_KM
+                * self.duration * self.M_IN_HOUR)
 
 
 class SportsWalking(Training):
@@ -83,13 +85,15 @@ class SportsWalking(Training):
 
     def get_spent_calories(self) -> float:
         return ((self.COEFF_1 * self.weight
-                + (self.get_mean_speed() ** 2 // self.height)
-                * self.COEFF_2 * self.weight) * (self.duration * 60))
+                + self.get_mean_speed() ** 2 // self.height
+                * self.COEFF_2 * self.weight)
+                * self.duration * self.M_IN_HOUR)
 
 
 class Swimming(Training):
     """Тренировка: плавание."""
     LEN_STEP: float = 1.38
+    SWIM_COEFF: float = 1.1
 
     def __init__(self,
                  action: int,
@@ -107,16 +111,17 @@ class Swimming(Training):
                 / self.M_IN_KM / self.duration)
 
     def get_spent_calories(self) -> float:
-        return (self.get_mean_speed() + 1.1) * 2 * self.weight
+        return (self.get_mean_speed() + self.SWIM_COEFF) * 2 * self.weight
 
 
 def read_package(workout_type: str, data: list) -> Training:
     """Прочитать данные полученные от датчиков."""
-    mapping_1: dict[str, Training] = {'SWM': Swimming, 'RUN': Running,
-                                      'WLK': SportsWalking}
-    if workout_type not in mapping_1.keys():
-        raise print('Неизвестный вид тренировки')
-    return mapping_1[workout_type](*data)
+    mapping_training_type: dict[str, Training] = {'SWM': Swimming,
+                                                  'RUN': Running,
+                                                  'WLK': SportsWalking}
+    if workout_type not in mapping_training_type.keys():
+        raise KeyError(f'Вид тренировки {workout_type} не поддерживается.')
+    return mapping_training_type[workout_type](*data)
 
 
 def main(training: Training) -> None:
